@@ -50,7 +50,7 @@ function renderRichText(data) {
 
     if (node.nodeType === 'paragraph') {
       return `<p>${node.content.map(child => child.value || '').join('')}</p>`;
-    } else if (node.nodeType === 'asset-hyperlink') {
+    } else if (node.nodeType === 'document') {
       const url = node.data?.target?.fields?.file?.url;
       const text = node.content?.[0]?.value;    
       return `<a href="${url}" target="_blank" rel="noopener noreferrer" download>${text} (Download DOCX)</a>`;
