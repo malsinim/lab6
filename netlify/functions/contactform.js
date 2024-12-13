@@ -32,7 +32,7 @@ exports.handler = async (event, context) => {
 
     // set up the email details
     const msg = {
-      to: ['malsinimasachchige@gmail.com', 'adam.kunz+inft@durhamcollege.ca'], 
+      to: 'malsinimasachchige@gmail.com', 
       from: 'malsinimasachchige@gmail.com', 
       // subject line with a prefix
       subject: `[This is an automated message] ${subject}`, 
