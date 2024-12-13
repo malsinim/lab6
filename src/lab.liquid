@@ -52,16 +52,9 @@ function renderRichText(data) {
       return `<p>${node.content.map(child => child.value || '').join('')}</p>`;
     } else if (node.nodeType === 'asset-hyperlink') {
       const url = node.data?.target?.fields?.file?.url;
-      const text = node.content?.[0]?.value;
-
-      if (url && text) {
-        console.log("Asset Hyperlink Found:", url);  // Log hyperlinks for verification
-
-        if (url.endsWith('.docx')) {
-          return `<a href="${url}" target="_blank" rel="noopener noreferrer" download>${text} (Download DOCX)</a>`;
-        }
-        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`;
-      }
+      const text = node.content?.[0]?.value;    
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" download>${text} (Download DOCX)</a>`;
+      
     }
     return '';
   }).join('');
