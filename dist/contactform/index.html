@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact me</title>   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href ="/public/css/index.css" rel="stylesheet">
+    
+  </head>
+  <div>
+    <body>
+      
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link " href="/index">Home</a>
+              </li>
+              <li class="nav-item"></li>
+                <a class="nav-link " href="/about">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/lab">My Labs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="">My Class Work</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/contactform">Contact me</a>
+              </li>
+            </ul>
+            
+          </div>
+        </div>
+</nav>
+
+      <div class="card__body">
+
+        
+<div class="d-flex justify-content-center">
+  <h1>Contact me</h1>
+</div>
+
+<!-- Contact Form -->
+<div id="form-container">   
+    <form id="contact-form">
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+
+        <label for="email">E-mail Address:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" placeholder="Enter the subject" required>
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="4" placeholder="Write your message here" required></textarea>
+
+        <button type="submit">Submit</button>
+        
+    </form>
+    
+    <!-- Spinner -->
+    <div id="spinner" class="spinner-border hidden"></div>
+    <!-- Response Message -->
+    <div id="response-message" class="hidden"></div>
+</div>
+
+<script>
+  document.getElementById('contact-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    // Hide form, show spinner
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('spinner').classList.remove('hidden');
+
+    // Collect form data
+    const formData = {
+      name: document.getElementById('name').value,
+      phone: document.getElementById('phone').value,
+      email: document.getElementById('email').value,
+      subject: document.getElementById('subject').value,
+      message: document.getElementById('message').value,
+    };
+    
+    try {
+      // send a POST request to the contact form API endpoint with the form data
+      const response = await fetch('/.netlify/functions/contactform', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      // if response is ok, display a success message
+      if (response.ok) {
+        document.getElementById('response-message').textContent =
+          "Thanks for reaching out. We'll get back to you soon!";
+      } else {
+        // if response is not ok, display error message
+        document.getElementById('response-message').textContent =
+          'An error occurred. Please try again.';
+          console.error('Error:', error);
+      }
+    } 
+    // handle any errors that occur
+    catch (error) {
+      // display an error message
+      document.getElementById('response-message').textContent ='An error occurred. Please try again.';
+        console.error('Error:', error);
+    } finally {
+      // Hide spinner, show response message
+      document.getElementById('spinner').classList.add('hidden');
+      document.getElementById('response-message').classList.remove('hidden');
+    }
+  });
+</script>
+
+
+      </div>
+    
+      
+<div class="d-flex justify-content-center">
+    <div class="mal">
+        
+        <p>&copy; <span id="year"></span> Malsini Masachchige.</p>
+       
+        <a class ="nav-link"href="/terms-and-conditions">Terms and Conditions</a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+      
+    </body>
+  </div>
+</html>

@@ -1,0 +1,30 @@
+<nav aria-label="HorrorMovie Facts page navigation">
+    <ul class="pagination">
+        {% comment %} Pagination referenced from: https://www.11ty.dev/docs/pagination/nav/ {% endcomment %}
+        {% comment %} got help from chat gpt to fix an error with the previous and next buttons when they are disabled {% endcomment %}
+        <li class="page-item {% if not pagination.href.previous %}disabled{% endif %}">
+            {% if pagination.href.previous %}
+                <a class="page-link" href="{{ pagination.href.previous }}">Previous</a>
+            {% else %}
+                <a class="page-link" href="#" aria-disabled="true">Previous</a>
+            {% endif %}
+        </li>
+        
+        {%- for pageEntry in pagination.pages %}
+            {% comment %} If the page URL is the same as the generated URL in the loop, show the page item as active {% endcomment %}
+            <li class="page-item {% if page.url == pagination.hrefs[ forloop.index0 ] %}active{% endif %}">
+                <a class="page-link" href="{{ pagination.hrefs[ forloop.index0 ] }}">
+                    Page {{ forloop.index }}
+                </a>
+            </li>
+        {%- endfor %}
+        
+        <li class="page-item {% if not pagination.href.next %}disabled{% endif %}">
+            {% if pagination.href.next %}
+                <a class="page-link" href="{{ pagination.href.next }}">Next</a>
+            {% else %}
+                <a class="page-link" href="#"aria-disabled="true">Next</a>
+            {% endif %}
+        </li>
+    </ul>
+</nav>

@@ -1,0 +1,84 @@
+---
+layout: layouts/default.liquid
+title: Contact me
+---
+
+<div class="d-flex justify-content-center">
+  <h1>{{ title }}</h1>
+</div>
+
+<!-- Contact Form -->
+<div id="form-container">   
+    <form id="contact-form">
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+
+        <label for="email">E-mail Address:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" placeholder="Enter the subject" required>
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="4" placeholder="Write your message here" required></textarea>
+
+        <button type="submit">Submit</button>
+        
+    </form>
+    
+    <!-- Spinner -->
+    <div id="spinner" class="spinner-border hidden"></div>
+    <!-- Response Message -->
+    <div id="response-message" class="hidden"></div>
+</div>
+
+<script>
+  document.getElementById('contact-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    // Hide form, show spinner
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('spinner').classList.remove('hidden');
+
+    // Collect form data
+    const formData = {
+      name: document.getElementById('name').value,
+      phone: document.getElementById('phone').value,
+      email: document.getElementById('email').value,
+      subject: document.getElementById('subject').value,
+      message: document.getElementById('message').value,
+    };
+    
+    try {
+      // send a POST request to the contact form API endpoint with the form data
+      const response = await fetch('/.netlify/functions/contactform', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      // if response is ok, display a success message
+      if (response.ok) {
+        document.getElementById('response-message').textContent =
+          "Thanks for reaching out. We'll get back to you soon!";
+      } else {
+        // if response is not ok, display error message
+        document.getElementById('response-message').textContent =
+          'An error occurred. Please try again.';
+          console.error('Error:', error);
+      }
+    } 
+    // handle any errors that occur
+    catch (error) {
+      // display an error message
+      document.getElementById('response-message').textContent ='An error occurred. Please try again.';
+        console.error('Error:', error);
+    } finally {
+      // Hide spinner, show response message
+      document.getElementById('spinner').classList.add('hidden');
+      document.getElementById('response-message').classList.remove('hidden');
+    }
+  });
+</script>

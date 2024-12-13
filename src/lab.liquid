@@ -1,0 +1,103 @@
+---
+layout: layouts/default.liquid
+pagination:
+  data: lab
+  size: 1
+  alias: post
+title: My Labs
+---
+
+<div class="d-flex justify-content-center">
+  <h1>{{ title }}</h1>
+</div>
+
+<div class="container">
+  {% for post in pagination.items %}
+    <div class="card">
+      <div class="card__header">
+        {% if post.fields.image.fields.file.url %}
+          <img src="{{ post.fields.image.fields.file.url }}" alt="card__image" class="card__image" width="900">
+        {% endif %}
+      </div>
+      <div class="card__body">
+        <h4>{{ post.fields.title }}</h4>
+        <button class="more-info-button" data-id="content-{{ forloop.index }}">Read More</button>
+        <div id="content-{{ forloop.index }}" class="hidden" data-richtext="{{ post.fields.content | jsonify | escape }}"></div>
+      </div>
+      <div class="card__footer">
+        <div class="user">
+          <img src="/public/img/user.jpeg" alt="user__image" class="user__image">
+          <div class="user__info">
+            <h5>Malsini Masachchige</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<hr>
+<div class="d-flex justify-content-center">
+  {% include 'partials/pagination.liquid' %}
+</div>
+
+<script>
+function renderRichText(data) {
+  if (!data || !data.content) return '<p>No content available</p>';
+
+  return data.content.map(node => {
+    if (node.nodeType === 'paragraph') {
+      return `<p>${node.content.map(child => child.value || '').join('')}</p>`;
+    } else if (node.nodeType === 'asset-hyperlink') {
+      // Safely accs nested properties
+      const url = node.data?.target?.fields?.file?.url;
+      const text = node.content?.[0]?.value;
+
+      if (url && text) {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+      }
+    } else if (node.nodeType === 'hyperlink') {
+      const url = node.data?.uri;
+      const text = node.content?.[0]?.value;
+
+      if (url && text) {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+      }
+    }
+    return '';
+  }).join('');
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const buttons = document.querySelectorAll(".more-info-button");
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const contentId = event.target.getAttribute("data-id");
+      const contentDiv = document.getElementById(contentId);
+
+      try {
+        // parse the RichText JSON
+        const richTextData = JSON.parse(unescape(contentDiv.dataset.richtext)); 
+        console.log("Rich Text Data:", richTextData);
+
+        if (contentDiv.classList.contains("hidden")) {
+          //render RichText to HTML
+          contentDiv.innerHTML = renderRichText(richTextData); 
+          contentDiv.classList.remove("hidden");
+          button.textContent = "Read Less";
+        } else {
+          // clear content on collapse
+          contentDiv.innerHTML = ""; 
+          contentDiv.classList.add("hidden");
+          button.textContent = "Read More";
+        }
+      } catch (error) {
+        console.error("Failed to parse or render rich text content:", error);
+        contentDiv.innerHTML = '<p>Error loading content. Please try again later.</p>';
+      }
+    });
+  });
+});
+</script>
