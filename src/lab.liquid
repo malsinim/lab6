@@ -23,6 +23,14 @@ title: My Labs
         <h4>{{ post.fields.title }}</h4>
         <button class="more-info-button" data-id="content-{{ forloop.index }}">Read More</button>
         <div id="content-{{ forloop.index }}" class="hidden" data-richtext="{{ post.fields.content | jsonify | escape }}"></div>
+         <!-- Link to the Word document -->
+         {% if post.fields.document_link %}
+          <p>
+            <a href="{{ post.fields.document}}" target="_blank" rel="noopener noreferrer" download>
+              Download the Lab Document
+            </a>
+          </p>
+        {% endif %}
       </div>
       <div class="card__footer">
         <div class="user">
@@ -50,11 +58,6 @@ function renderRichText(data) {
 
     if (node.nodeType === 'paragraph') {
       return `<p>${node.content.map(child => child.value || '').join('')}</p>`;
-    } else if (node.nodeType === 'document') {
-      const url = node.data?.target?.fields?.file?.url;
-      const text = node.content?.[0]?.value;    
-      return `<a href="${url}" target="_blank" rel="noopener noreferrer" download>${text} (Download DOCX)</a>`;
-      
     }
     return '';
   }).join('');
