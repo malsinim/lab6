@@ -26,7 +26,7 @@ title: My Labs
          <!-- Link to the Word document -->
          {% if post.fields.document_link %}
           <p>
-            <a href="{{ post.fields.document}}" target="_blank" rel="noopener noreferrer" download>
+            <a href="{{ post.fields.document.fields.file.url }}" target="_blank" rel="noopener noreferrer" download>
               Download the Lab Document
             </a>
           </p>
