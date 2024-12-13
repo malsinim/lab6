@@ -49,11 +49,14 @@ function renderRichText(data) {
     if (node.nodeType === 'paragraph') {
       return `<p>${node.content.map(child => child.value || '').join('')}</p>`;
     } else if (node.nodeType === 'asset-hyperlink') {
-      // Safely accs nested properties
       const url = node.data?.target?.fields?.file?.url;
       const text = node.content?.[0]?.value;
 
       if (url && text) {
+        // Check if it's a Word document
+        if (url.endsWith('.docx')) {
+          return `<a href="${url}" target="_blank" rel="noopener noreferrer" download>${text} (Download DOCX)</a>`;
+        }
         return `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`;
       }
     } else if (node.nodeType === 'hyperlink') {
@@ -61,13 +64,15 @@ function renderRichText(data) {
       const text = node.content?.[0]?.value;
 
       if (url && text) {
+        if (url.endsWith('.docx')) {
+          return `<a href="${url}" target="_blank" rel="noopener noreferrer" download>${text} (Download DOCX)</a>`;
+        }
         return `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`;
       }
     }
     return '';
   }).join('');
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
   const buttons = document.querySelectorAll(".more-info-button");
