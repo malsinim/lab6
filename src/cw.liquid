@@ -1,10 +1,10 @@
 ---
 layout: layouts/default.liquid
 pagination:
-  data: lab
+  data: cw
   size: 1
   alias: post
-title: My Labs
+title: My Class Work
 ---
 
 <div class="d-flex justify-content-center">
@@ -52,17 +52,14 @@ title: My Labs
 <script>
 function renderRichText(data) {
   if (!data || !data.content) return '<p>No content available</p>';
-
   return data.content.map(node => {
-
     if (node.nodeType === 'paragraph') {
       return `<p>${node.content.map(child => child.value || '').join('')}</p>`;
     }
     return '';
   }).join('');
 }
-
-// to hide/show the content with the button 
+// to hide/show content with button click
 document.addEventListener("DOMContentLoaded", () => {
   const buttons = document.querySelectorAll(".more-info-button");
 
